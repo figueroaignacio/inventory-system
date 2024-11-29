@@ -1,14 +1,17 @@
-import express, {Request, Response} from "express"
+import express from "express";
+import authRoutes from "./auth/auth.routes";
+import dotenv from "dotenv";
 
-const app = express()
-const PORT = 4321
+dotenv.config();
+const PORT = process.env.PORT || 4322;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('¡Hello world from express.js!');
+const app = express();
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Hello, world!");
 });
 
-app.listen(PORT, () => {
-  console.log("Server started on port " + PORT);
-})
+app.use("/auth", authRoutes);
 
-                     
+app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
