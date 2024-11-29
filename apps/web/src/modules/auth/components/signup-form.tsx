@@ -4,9 +4,14 @@ export function SignUpForm() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
@@ -24,16 +29,24 @@ export function SignUpForm() {
       alert(data.message);
     } catch (error) {
       console.error("Error registering user:", error);
-      alert("Error registering user");
+      setError("Error registering user. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <h2>Register</h2>
+      {error && (
+        <p className="error-message" role="alert">
+          {error}
+        </p>
+      )}
       <div>
-        <label>Name:</label>
+        <label htmlFor="name">Name:</label>
         <input
+          id="name"
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -41,8 +54,9 @@ export function SignUpForm() {
         />
       </div>
       <div>
-        <label>Email:</label>
+        <label htmlFor="email">Email:</label>
         <input
+          id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -50,15 +64,18 @@ export function SignUpForm() {
         />
       </div>
       <div>
-        <label>Password:</label>
+        <label htmlFor="password">Password:</label>
         <input
+          id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
       </div>
-      <button type="submit">Register</button>
+      <button type="submit" disabled={loading}>
+        {loading ? "Registering..." : "Register"}
+      </button>
     </form>
   );
 }

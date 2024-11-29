@@ -1,15 +1,19 @@
-import SignupForm from "./modules/auth/components/signup-form.tsx";
-import SignInForm from "./modules/auth/components/signin-form.tsx";
-import { UsersList } from "./modules/auth/components/users-list.tsx";
+// Components
+import { BrowserRouter as Router } from "react-router-dom";
+import { AppRouter } from "./config/router.tsx";
 
-const App = () => {
+import { AuthProvider } from "./modules/auth/hooks/contexts/auth-provider.tsx";
+
+function App() {
   return (
-    <div>
-      <SignupForm />
-      <SignInForm />
-      <UsersList />
-    </div>
+    <AuthProvider>
+      <Router>
+        <main className="py-12">
+          <AppRouter />
+        </main>
+      </Router>
+    </AuthProvider>
   );
-};
+}
 
 export default App;
