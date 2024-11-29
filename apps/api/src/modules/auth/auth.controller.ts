@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import prisma from "../config/prisma-client";
-import { JWT_SECRET } from "../lib/constants";
+import prisma from "../../config/prisma-client";
+import { JWT_SECRET } from "../../lib/constants";
 
 export const register = async (req: Request, res: Response): Promise<void> => {
   const { name, email, password } = req.body;
@@ -26,12 +26,16 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const { password: _, ...userWithoutPassword } = user;
 
-    res.status(201).json({ message: "User registered successfully.", user: userWithoutPassword });
+    res
+      .status(201)
+      .json({
+        message: "User registered successfully.",
+        user: userWithoutPassword,
+      });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error." });
   }
 };
-
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
