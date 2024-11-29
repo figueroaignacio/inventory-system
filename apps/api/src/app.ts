@@ -1,5 +1,6 @@
 // Express
 import express, { Request, Response } from "express";
+import cookieParser from "cookie-parser";
 
 // Routes
 import authRoutes from "./modules/auth/auth.routes";
@@ -18,6 +19,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello, world!");
 });
 
+app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 

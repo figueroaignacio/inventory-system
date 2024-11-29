@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { UsersList } from "../modules/auth/components/users-list.tsx";
 import { useAuth } from "../modules/auth/hooks/use-auth.ts";
 
 export function DashboardPage() {
@@ -14,6 +15,7 @@ export function DashboardPage() {
     <div>
       <h1>Hola, {userName ? userName : "usuario"}</h1>
       <button onClick={handleLogout}>Cerrar sesión</button>
+      <UsersList />
     </div>
   );
 }

@@ -1,48 +1,63 @@
-import { useState, FormEvent } from "react";
+// Hooks
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/use-auth.ts";
+
+interface LoginResponse {
+  message: string;
+  userName: string;
+}
+
+async function loginUser(
+  email: string,
+  password: string
+): Promise<LoginResponse> {
+  const response = await fetch("/api/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, password }),
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Invalid credentials");
+  }
+
+  return response.json();
+}
 
 export function SignInForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { login, setUserName } = useAuth();
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Invalid credentials");
-      }
-
-      const data = await response.json();
+  const mutation: UseMutationResult<
+    LoginResponse,
+    Error,
+    { email: string; password: string }
+  > = useMutation({
+    mutationFn: ({ email, password }) => loginUser(email, password),
+    onSuccess: (data) => {
       alert(data.message);
-
-      // Usa la función `setUserName` para actualizar el nombre de usuario en el contexto
       setUserName(data.userName);
-
-      login(); // Solo llamamos a login() sin argumentos
-
+      login();
       navigate("/dashboard");
-    } catch (error) {
+    },
+    onError: (error: Error) => {
       console.error("Error logging in:", error);
       setError("Invalid credentials. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    mutation.mutate({ email, password });
   };
 
   return (
@@ -73,8 +88,8 @@ export function SignInForm() {
           required
         />
       </div>
-      <button type="submit" disabled={loading}>
-        {loading ? "Logging in..." : "Login"}
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? "Logging in..." : "Login"}
       </button>
     </form>
   );

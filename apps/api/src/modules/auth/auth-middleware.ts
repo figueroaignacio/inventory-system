@@ -7,13 +7,8 @@ export const authMiddleware = (
   res: Response,
   next: NextFunction,
 ): void => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) {
-    res.status(401).json({ error: "Authorization header missing" });
-    return;
-  }
+  const token = req.cookies.token;
 
-  const token = authHeader.split(" ")[1];
   if (!token) {
     res.status(401).json({ error: "Token missing" });
     return;

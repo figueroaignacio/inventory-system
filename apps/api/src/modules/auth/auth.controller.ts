@@ -26,12 +26,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const { password: _, ...userWithoutPassword } = user;
 
-    res
-      .status(201)
-      .json({
-        message: "User registered successfully.",
-        user: userWithoutPassword,
-      });
+    res.status(201).json({
+      message: "User registered successfully.",
+      user: userWithoutPassword,
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error." });
   }
@@ -50,7 +48,15 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
       expiresIn: "1h",
     });
-    res.json({ message: "User logged in successfully.", token });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 3600000,
+    });
+
+    res.json({ message: "User logged in successfully." });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error." });
   }
