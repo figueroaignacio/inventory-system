@@ -1,13 +1,13 @@
-import React, { useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 
-const SignInForm: React.FC = () => {
+export function SignInForm() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/auth/login`, {
+      const response = await fetch(`/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,7 +21,6 @@ const SignInForm: React.FC = () => {
 
       const data = await response.json();
       alert(data.message);
-      // Guarda el token de usuario si es necesario, e.g., localStorage.setItem("token", data.token);
     } catch (error) {
       console.error("Error logging in:", error);
       alert("Invalid credentials");
@@ -52,6 +51,4 @@ const SignInForm: React.FC = () => {
       <button type="submit">Login</button>
     </form>
   );
-};
-
-export default SignInForm;
+}

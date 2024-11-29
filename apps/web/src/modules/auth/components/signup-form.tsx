@@ -1,6 +1,6 @@
-import React, { useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 
-const SignUpForm: React.FC = () => {
+export function SignUpForm() {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -8,7 +8,7 @@ const SignUpForm: React.FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch("/auth/register", {
+      const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -61,6 +61,4 @@ const SignUpForm: React.FC = () => {
       <button type="submit">Register</button>
     </form>
   );
-};
-
-export default SignUpForm;
+}
