@@ -1,7 +1,10 @@
-// Hooks
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "../../../shared/components/taost-component.tsx";
 import { useAuth } from "../hooks/use-auth.ts";
 
 interface LoginResponse {
@@ -43,14 +46,14 @@ export function SignInForm() {
   > = useMutation({
     mutationFn: ({ email, password }) => loginUser(email, password),
     onSuccess: (data) => {
-      alert(data.message);
+      showSuccessToast(data.message);
       setUserName(data.userName);
       login();
       navigate("/dashboard");
     },
-    onError: (error: Error) => {
-      console.error("Error logging in:", error);
+    onError: () => {
       setError("Invalid credentials. Please try again.");
+      showErrorToast("Error registering user. Please try again.");
     },
   });
 
@@ -61,36 +64,71 @@ export function SignInForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="w-96 mx-auto p-6 bg-white shadow-lg rounded-lg"
+    >
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Login</h2>
       {error && (
-        <p className="error-message" role="alert">
+        <p
+          className="mb-4 text-sm text-red-600 bg-red-100 p-2 rounded"
+          role="alert"
+        >
           {error}
         </p>
       )}
-      <div>
-        <label htmlFor="email">Email:</label>
+      <div className="mb-4">
+        <label
+          htmlFor="email"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Email
+        </label>
         <input
           id="email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         />
       </div>
-      <div>
-        <label htmlFor="password">Password:</label>
+      <div className="mb-4">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700"
+        >
+          Password
+        </label>
         <input
           id="password"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
         />
       </div>
-      <button type="submit" disabled={mutation.isPending}>
+      <button
+        type="submit"
+        disabled={mutation.isPending}
+        className={`w-full px-4 py-2 text-white font-semibold rounded-md shadow ${
+          mutation.isPending
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-blue-600 hover:bg-blue-700 focus:ring focus:ring-blue-500"
+        }`}
+      >
         {mutation.isPending ? "Logging in..." : "Login"}
       </button>
+      <p className="mt-4 text-sm text-center text-gray-600">
+        Don’t have an account?{" "}
+        <a
+          href="/register"
+          className="text-blue-600 hover:underline focus:outline-none"
+        >
+          Sign up
+        </a>
+      </p>
     </form>
   );
 }
