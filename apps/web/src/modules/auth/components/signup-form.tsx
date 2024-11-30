@@ -44,12 +44,12 @@ export function SignUpForm() {
     mutationFn: ({ name, email, password }) =>
       registerUser(name, email, password),
     onSuccess: (data) => {
-      showSuccessToast(data.message); // Muestra un toast de éxito
-      navigate("/login"); // Redirige al login
+      showSuccessToast(data.message);
+      navigate("/login");
     },
     onError: (error: Error) => {
       console.error("Error registering user:", error);
-      showErrorToast("Error registering user. Please try again."); // Muestra un toast de error
+      showErrorToast("Error registering user. Please try again.");
     },
   });
 
