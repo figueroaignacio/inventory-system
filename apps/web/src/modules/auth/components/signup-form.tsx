@@ -61,7 +61,7 @@ export function SignUpForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-96 mx-auto p-6 bg-white shadow-lg rounded-lg"
+      className="w-96 mx-auto p-6 bg-white shadow-lg rounded-lg border-[1px] border-gray-300"
     >
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Register</h2>
       <div className="mb-4">
