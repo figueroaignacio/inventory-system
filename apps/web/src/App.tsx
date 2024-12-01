@@ -10,7 +10,7 @@ function App() {
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <main className="min-h-dvh flex flex-col justify-center items-center">
+          <main className="min-h-dvh">
             <AppRouter />
           </main>
         </Router>

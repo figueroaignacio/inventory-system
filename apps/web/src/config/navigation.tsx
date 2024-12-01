@@ -1,10 +1,10 @@
-import { HomePage, SignInPage, SignUpPage, DashboardPage } from "../pages";
 import { ProtectedRoute } from "../modules/auth/components/protected-route.tsx";
+import { DashboardPage, LandingPage, SignInPage, SignUpPage } from "../pages";
 
 export const routes = [
   {
     path: "/",
-    element: <HomePage />,
+    element: <LandingPage />,
   },
   {
     path: "/login",

@@ -1,6 +1,6 @@
-import { HomePage } from "./home-page.tsx";
+import { DashboardPage } from "./dashboard-page.tsx";
+import { LandingPage } from "./landing-page.tsx";
 import { SignInPage } from "./signin-page.tsx";
 import { SignUpPage } from "./signup-page.tsx";
-import { DashboardPage } from "./dashboard-page.tsx";
 
-export { HomePage, SignUpPage, SignInPage, DashboardPage };
+export { DashboardPage, LandingPage, SignInPage, SignUpPage };
